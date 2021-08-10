@@ -12,9 +12,10 @@ class TasksService {
     return tasks;
   }
 
-  addTask(TaskEntity task) async {
+  addTask({required String title, required bool isCompleted, String? description, int? completionDate}) async {
     try {
-      await tasksRepository.saveTaskEntity(task);
+      TaskEntity taskEntity = TaskEntity(title: title, isCompleted: isCompleted, description: description, completionDate: completionDate);
+      await tasksRepository.saveTaskEntity(taskEntity);
       return true;
 
     } catch(error) {

@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:tasks_manager_app/data/repositories/tasks_repository.dart';
+import 'package:tasks_manager_app/data/tasks_storage.dart';
 import 'package:tasks_manager_app/domain/entities/task_entity.dart';
 
 class RamTasksRepository extends TasksRepository {
-  String storage;
+  TasksStorage tasksStorage;
   int _lastId = 0;
 
-  RamTasksRepository(this.storage);
+  RamTasksRepository(this.tasksStorage);
 
   int _generateId() {
-
     return _lastId += 1;
   }
 
@@ -20,13 +20,9 @@ class RamTasksRepository extends TasksRepository {
 
   saveTaskEntity(TaskEntity taskEntity) async {
     taskEntity.setId(_generateId());
-    print('Id seted to the task from TaskRepo');
     List<TaskEntity> tasksList = _getTasksFromStorage();
-    print('Got tasksList from TaskRepo (saveTaskEntity()): $tasksList');
     tasksList.add(taskEntity);
-    print('Added task __$taskEntity to the tasksList from TaskRepo (saveTaskEntity()): $tasksList');
     _setTasksToStorage(tasksList);
-    print('Seted all tasks to Storage from TaskRepo (saveTaskEntity()): $tasksList');
     return true;
   }
 
@@ -34,8 +30,6 @@ class RamTasksRepository extends TasksRepository {
     List<TaskEntity> tasksList = _getTasksFromStorage();
     var taskToUpdate = tasksList.firstWhere((task) => task.id == taskEntity.id);
     int taskToUpdateIndex = tasksList.indexOf(taskToUpdate);
-    print('SHOW TASK TO UPDATE RAM_REPO: ${taskToUpdate.title}');
-    print('SHOW TASKENTITY RAM_REPO: ${taskEntity.title}');
     tasksList[taskToUpdateIndex] = taskEntity;
     taskToUpdate = taskEntity;
     _setTasksToStorage(tasksList);
@@ -51,23 +45,14 @@ class RamTasksRepository extends TasksRepository {
   }
 
   List<TaskEntity> _getTasksFromStorage() {
-    var tasksJson = jsonDecode(storage)['tasks'] as List;
-    print('get tasks from list from TasksRepo (_getTasksFromStorage()): $tasksJson');
+    var tasksJson = jsonDecode(tasksStorage.data)['tasks'] as List;
     List<TaskEntity> tasksList = tasksJson.map((taskJson) => TaskEntity.fromJson(taskJson)).toList();
-    print('Converted list from json from TasksRepo (_getTasksFromStorage()): $tasksList');
     return tasksList;
   }
 
   void _setTasksToStorage(tasksList) {
-    print('SET TASK TO STORAGE TEST');
-    String tasksJson = jsonEncode(tasksList.map((TaskEntity task) {
-      print('TASK FROM TASKREPO (_setTasksToStorage): $task');
-      var jsonTask = task.toJson();
-      print('JSOnTASK FROM TASKREPO (_setTasksToStorage): $jsonTask');
-      return jsonTask;
-      }).toList()).toString();
-    print('tasksJson executed from from ramTasksRepo (_setTasksToStorage())');
-    storage = '{"tasks": $tasksJson}';
-    print('Updated storage from ramTasksRepo (_setTasksToStorage()): $storage');
+    String tasksJson = jsonEncode(tasksList.map((TaskEntity task) => task.toJson()).toList()).toString();
+    tasksStorage.setTasks(tasksJson);
+    print(tasksStorage.data);
   }
 }

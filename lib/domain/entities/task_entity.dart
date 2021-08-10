@@ -29,8 +29,8 @@ class TaskEntity {
     return _description;
   }
 
-  DateTime? get completionDate {
-    return DateTime.fromMillisecondsSinceEpoch(_completionDate!);
+  int? get completionDate {
+    return _completionDate;
   }
 
   void setId(int id) {
@@ -72,5 +72,31 @@ class TaskEntity {
       'description': _description,
       'completionDate': _completionDate
     };
+  }
+
+  @override
+  bool operator ==(Object other) {
+    TaskEntity otherTask = other as TaskEntity;
+    if (id != other.id)  {
+      return false;
+    }
+
+    if (isCompleted != other.isCompleted) {
+      return false;
+    }
+
+    if (title != other.title) {
+      return false;
+    }
+
+    if (description != other.description) {
+      return false;
+    }
+
+    if (completionDate != other.completionDate) {
+      return false;
+    }
+
+    return true;
   }
 }
