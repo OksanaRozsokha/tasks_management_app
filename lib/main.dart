@@ -10,16 +10,11 @@ import 'package:tasks_manager_app/presentation/tasks_manager_page.dart';
 // import 'package:event/event.dart';
 
 void main() {
-  final tasksService =  _connectToService();
-
-  runApp(MyApp(tasksService));
-}
-
-TasksService _connectToService() {
   TasksRepository ramTasksRepo = RamTasksRepository(TasksStorage());
   EventEmitter emitter = new EventEmitter();
   TasksService tasksService = TasksService(ramTasksRepo, emitter);
-  return tasksService;
+
+  runApp(MyApp(tasksService));
 }
 
 class MyApp extends StatelessWidget {

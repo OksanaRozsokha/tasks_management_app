@@ -17,23 +17,37 @@ class _ShortTaskBlockState extends State<ShortTaskBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Text(_getTaskTitle()),
-          ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all( Radius.circular(10.0)),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0),
+              blurRadius: 5.0,
+            ),
+          ],
+        ),
+        child: Padding(
+         padding: EdgeInsets.all(10.0),
+         child: Column(
+          children: [
+            Text(_getTaskTitle(), ),
+            SizedBox(
+              height: 5,
+            ),
 
-          if (task.completionDate != null)
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: _getCompletionDateWidget(),
-          ),
-        ],
+            if (task.completionDate != null)
+              _getCompletionDateWidget(),
+          ],
+        ),
+      ),
       )
-
     );
+
   }
 
   String _getTaskTitle() {
@@ -70,11 +84,13 @@ class _ShortTaskBlockState extends State<ShortTaskBlock> {
 
   Widget _buildCompletionDateBuilder(int taskTimestamp) {
     var completionDate = convertTimestampToDate(taskTimestamp);
-    var todayTimestamp = convertDateToTimestamp(DateTime.now());
-    var isExpired = todayTimestamp < taskTimestamp ? false: true;
+    var todayDate = DateTime.now();
+    var todayResetedTimeDate = todayDate.subtract(Duration(hours: todayDate.hour, minutes: todayDate.minute, seconds: todayDate.second, milliseconds: todayDate.millisecond, microseconds: todayDate.microsecond));
+    var todayTimestamp = convertDateToTimestamp(todayResetedTimeDate);
+    var isExpired = todayTimestamp <= taskTimestamp;
     return
       Text('${completionDate.day}/${completionDate.month}/${completionDate.year}', style: TextStyle(
-        color: isExpired ? Colors.red : Colors.green
+        color: isExpired ?  Colors.green : Colors.red, fontSize: 13,
       )
     );
   }

@@ -28,7 +28,7 @@ class TasksService {
   }
 
   updateTask(TaskEntity task) async {
-     try {
+    try {
       await tasksRepository.updateTaskEntity(task);
       emitter.emit('updateTask', null, task);
       return true;

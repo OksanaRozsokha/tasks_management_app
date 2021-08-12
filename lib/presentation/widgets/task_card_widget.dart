@@ -41,95 +41,102 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   @override
+
+
   Widget build(BuildContext context) {
-    return Dialog(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Task details'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
       child: Container(
-        height: double.infinity,
-        width: double.infinity,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Row(
-                children: [
+        height: MediaQuery.of(context).size.height - 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
 
-                  IconButton(
-                    icon: Icon(Icons.done),
-                    onPressed: () {
-                      _onSaveBtn();
-                    },
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: titleInputController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter a title of the task'
                   ),
-
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              )
-            ),
-
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: TextField(
-                controller: titleInputController,
-                decoration: InputDecoration(
-                  hintText: 'Enter a title of the task'
                 ),
               ),
-            ),
 
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child:  Row(
-                children: [
-                  Text('Сompleted'),
-                  Checkbox(
-                    value: isCompletedController,
-                    onChanged: (isChecked) {
-                      setState(() {
-                        isCompletedController = isChecked!;
-                      });
-                    }
-                  )
-                ],
-              )
-            ),
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Mark task as completed', style: TextStyle(fontSize: 16),),
+                    Checkbox(
+                      value: isCompletedController,
+                      onChanged: (isChecked) {
+                        setState(() {
+                          isCompletedController = isChecked!;
+                        });
+                      }
+                    )
+                  ],
+                )
+              ),
 
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: TextField(
-                controller: descriptionInputController,
-                decoration: InputDecoration(
-                  hintText: 'Add a description of the task'
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextField(
+                  controller: descriptionInputController,
+                  decoration: InputDecoration(
+                    hintText: 'Add a description to the task'
+                  ),
                 ),
               ),
-            ),
 
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: GestureDetector(
-                onTap: () => _selectCompletionDate(context),
-                child: completionDateController != null ? _getTextCompletionDateWidget(completionDateController!) : Text('Add Completion Date'),
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: GestureDetector(
+                  onTap: () => _selectCompletionDate(context),
+                  child: completionDateController != null ? _getTextCompletionDateWidget(completionDateController!) : Text('Add Completion Date', style: TextStyle(fontSize: 16),),
+                ),
               ),
-            ),
 
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: TextButton(
-                child: Text('Remove this task'),
-                onPressed: () {
-                  tasksService.removeTask(task);
-                  Navigator.of(context).pop();
-                },
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: TextButton(
+                  child: Text('Remove this task', style: TextStyle(color: Colors.red.shade600, fontSize: 16),),
+                  onPressed: () {
+                    tasksService.removeTask(task);
+                    Navigator.of(context).pop();
+                  },
+                )
+              ),
 
-              )
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: ElevatedButton(
+                  child: Text('Save', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600,),),
+                  style: ElevatedButton.styleFrom(
+                    primary: _isTaskDataChangedCondition() && titleInputController.text.trim().length> 0 ? Color(0xFF32AB32) : Color(0xFFDDDDDD),
+                    shadowColor: Colors.black,
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, right: 8.0, left: 8.0),
+                    minimumSize: Size(140, 50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                    animationDuration: Duration(milliseconds: 100),
+                    alignment: Alignment.center,
+                  ),
+                  onPressed: () {
+                    _onSaveBtn();
+                  },
+                )
+
+              ),
+            ],
+          ),
         ),
+
       ),
     );
   }
@@ -140,13 +147,17 @@ class _TaskCardState extends State<TaskCard> {
     var todayResetedTimeDate = todayDate.subtract(Duration(hours: todayDate.hour, minutes: todayDate.minute, seconds: todayDate.second, milliseconds: todayDate.millisecond, microseconds: todayDate.microsecond));
     var todayTimestamp = convertDateToTimestamp(todayResetedTimeDate);
     var completionDatedescription;
+    var textColor;
     if (todayTimestamp <= taskTimestamp) {
       completionDatedescription = 'The completion date is: ';
+      textColor = Color(0xFF32AB32);
+
     } else {
       completionDatedescription = 'The completion date is expired: ';
+      textColor = Colors.red.shade700;
     }
 
-    return Text('$completionDatedescription ${completionDate.day}/${completionDate.month}/${completionDate.year}');
+    return Text('$completionDatedescription ${completionDate.day}/${completionDate.month}/${completionDate.year}', style: TextStyle(color: textColor, fontSize: 16),);
   }
 
   Future<void> _selectCompletionDate(BuildContext context) async {

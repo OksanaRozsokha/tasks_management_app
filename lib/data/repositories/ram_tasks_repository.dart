@@ -31,7 +31,6 @@ class RamTasksRepository extends TasksRepository {
     var taskToUpdate = tasksList.firstWhere((task) => task.id == taskEntity.id);
     int taskToUpdateIndex = tasksList.indexOf(taskToUpdate);
     tasksList[taskToUpdateIndex] = taskEntity;
-    // taskToUpdate = taskEntity;
     _setTasksToStorage(tasksList);
     return true;
   }

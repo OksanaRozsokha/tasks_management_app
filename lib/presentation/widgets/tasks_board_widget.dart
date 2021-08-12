@@ -26,8 +26,8 @@ class _TasksBoardState extends State<TasksBoard> {
 
   @override
    void initState() {
-    super.initState();
     tasksFuture = _getTasksList();
+    super.initState();
     // tasksService.getAllTasks().then((value) => null)
   }
 
@@ -83,14 +83,18 @@ class _TasksBoardState extends State<TasksBoard> {
                           children: [
                             Padding(
                               padding: EdgeInsets.all(15.0),
-                              child: Text('In progress', style: TextStyle(),)
+                              child: Text('In progress', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
                             ),
+                            Divider(),
                             ListView(
 
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               key: Key(tasks.length.toString()),
                               children: _buildUnCompletedTasksList(tasks)
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                           ],
                         ),
@@ -116,14 +120,18 @@ class _TasksBoardState extends State<TasksBoard> {
                           children: [
                             Padding(
                               padding: EdgeInsets.all(15.0),
-                              child: Text('Completed', style: TextStyle(),)
+                              child: Text('Completed', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
                             ),
+                            Divider(),
                             ListView(
 
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               key: Key(tasks.length.toString()),
                               children: _buildCompletedTasksList(tasks)
+                            ),
+                            SizedBox(
+                              height: 10,
                             ),
                           ],
                         ),
@@ -134,58 +142,6 @@ class _TasksBoardState extends State<TasksBoard> {
                       ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-
-                  //   children: [
-                  //     Container(
-                  //       width: (MediaQuery.of(context).size.width/2)- 22.5,
-                  //       decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-                  //         color: Color(0xFFDFE8FA),
-                  //         boxShadow: [
-                  //           BoxShadow(
-                  //             color: Colors.grey,
-                  //             offset: Offset(0.0, 1.0), //(x,y)
-                  //             blurRadius: 5.0,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       child: Column(
-
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           ListView(
-
-                  //             physics: const NeverScrollableScrollPhysics(),
-                  //             shrinkWrap: true,
-                  //             key: Key(tasks.length.toString()),
-                  //             children: _buildUnCompletedTasksList(tasks)
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     SizedBox(
-                  //       width: 20,
-                  //     ),
-                  //     Expanded(
-                  //       child: Column (
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           ListView(
-                  //             physics: const NeverScrollableScrollPhysics(),
-                  //             shrinkWrap: true,
-                  //             key: Key(tasks.length.toString()),
-                  //             children: _buildCompletedTasksList(tasks)
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-
-
-                  //   ],
-                  // ),
                 ],
               ),
             );
@@ -263,7 +219,7 @@ class _TasksBoardState extends State<TasksBoard> {
           child: ShortTaskBlock(allTasks[index]),
         );
       } else {
-        return Container();
+        return SizedBox();
       }
     });
   }
@@ -275,10 +231,9 @@ class _TasksBoardState extends State<TasksBoard> {
       if (allTasks[index].isCompleted) {
         return  GestureDetector(
           onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => TaskCard(tasksService, allTasks[index]),
-            );
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => TaskCard(tasksService, allTasks[index]),
+            ));
           },
           onLongPress: (){
               // open dialog OR navigate OR do what you want
@@ -286,7 +241,7 @@ class _TasksBoardState extends State<TasksBoard> {
           child: ShortTaskBlock(allTasks[index]),
         );
       } else {
-        return Container();
+        return SizedBox();
       }
     });
   }
