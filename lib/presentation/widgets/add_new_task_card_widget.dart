@@ -62,7 +62,6 @@ class _AddNewTaskCardState extends State<AddNewTaskCard> {
                 },
                 controller: titleInputController,
                 decoration: InputDecoration(
-                // border: OutlineInputBorder(),
                   hintText: 'Enter a title of the task'
                 ),
               ),
