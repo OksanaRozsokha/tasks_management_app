@@ -1,37 +1,35 @@
+// import 'package:event/event.dart';
+// import 'package:tasks_manager_app/domain/events/entity_change_args.dart';
+import 'package:eventify/eventify.dart';
+
 class TaskEntity {
   late int? _id;
   late bool _isCompleted;
   late String _title;
   late String? _description;
   late int? _completionDate;
+  late EventEmitter _emitter;
 
-  TaskEntity({ id, required isCompleted, required title, description, completionDate })
+  TaskEntity({id, required isCompleted, required title, required emitter, description, completionDate})
     :
     _id = id,
     _isCompleted = isCompleted,
     _title = title,
     _description = description,
-    _completionDate = completionDate;
+    _completionDate = completionDate,
+    _emitter = emitter;
 
-  int? get id {
-    return _id;
-  }
+  int? get id => _id;
 
-  bool get isCompleted {
-    return _isCompleted;
-  }
+  bool get isCompleted => _isCompleted;
 
-  String get title {
-    return _title;
-  }
+  String get title => _title;
 
-  String? get description {
-    return _description;
-  }
+  String get description => _description ?? '';
 
-  int? get completionDate {
-    return _completionDate;
-  }
+  int? get completionDate => _completionDate;
+
+  EventEmitter get emitter => _emitter;
 
   void setId(int id) {
     _id = id;
@@ -39,32 +37,35 @@ class TaskEntity {
 
   void setStatus(bool isCompleted) {
     _isCompleted = isCompleted;
+    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(isCompleted)));
+    emitter.emit('statusChanged', null, _isCompleted);
   }
 
   void setTitle(String newTitle) {
     _title = newTitle;
+    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(title)));
+    emitter.emit('titleChanged', null, _title);
   }
 
   void setDescription(String? newDescription) {
     _description = newDescription;
+    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(description)));
+    emitter.emit('descriptionChanged', null, _description);
   }
 
   void setCompletionDate(int? newCompletionDate) {
     _completionDate = newCompletionDate;
+    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(completionDate)));
+    emitter.emit('dateChanged', null, _completionDate);
   }
 
-  factory TaskEntity.fromJson(Map<String, dynamic> json) {
-    return TaskEntity(
-      id: json['id'],
-      isCompleted: json['isCompleted'],
-      title: json['title'],
-      description: json['description'],
-      completionDate: json['completionDate'],
-    );
+  factory TaskEntity.create({ id, required isCompleted, required title, description, completionDate }) {
+    // var events = new Event<EntityChangeArgs>();
+    var evEmitter = new EventEmitter();
+    return TaskEntity(id: id, isCompleted: isCompleted, title: title, emitter: evEmitter, description: description, completionDate: completionDate);
   }
 
   Map<String, dynamic> toJson() {
-    print('ETITY TO JSON TEST');
     return {
       'id': _id,
       'isCompleted': _isCompleted,
