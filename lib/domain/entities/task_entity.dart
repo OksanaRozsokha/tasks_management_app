@@ -1,5 +1,3 @@
-// import 'package:event/event.dart';
-// import 'package:tasks_manager_app/domain/events/entity_change_args.dart';
 import 'package:eventify/eventify.dart';
 
 class TaskEntity {
@@ -37,30 +35,25 @@ class TaskEntity {
 
   void setStatus(bool isCompleted) {
     _isCompleted = isCompleted;
-    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(isCompleted)));
     emitter.emit('statusChanged', null, _isCompleted);
   }
 
   void setTitle(String newTitle) {
     _title = newTitle;
-    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(title)));
     emitter.emit('titleChanged', null, _title);
   }
 
   void setDescription(String? newDescription) {
     _description = newDescription;
-    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(description)));
     emitter.emit('descriptionChanged', null, _description);
   }
 
   void setCompletionDate(int? newCompletionDate) {
     _completionDate = newCompletionDate;
-    // _events.broadcast(EntityChangeArgs(_getEventChangeArgs(completionDate)));
     emitter.emit('dateChanged', null, _completionDate);
   }
 
   factory TaskEntity.create({ id, required isCompleted, required title, description, completionDate }) {
-    // var events = new Event<EntityChangeArgs>();
     var evEmitter = new EventEmitter();
     return TaskEntity(id: id, isCompleted: isCompleted, title: title, emitter: evEmitter, description: description, completionDate: completionDate);
   }
@@ -76,25 +69,25 @@ class TaskEntity {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator == (Object other) {
     TaskEntity otherTask = other as TaskEntity;
-    if (id != other.id)  {
+    if (id != otherTask.id)  {
       return false;
     }
 
-    if (isCompleted != other.isCompleted) {
+    if (isCompleted != otherTask.isCompleted) {
       return false;
     }
 
-    if (title != other.title) {
+    if (title != otherTask.title) {
       return false;
     }
 
-    if (description != other.description) {
+    if (description != otherTask.description) {
       return false;
     }
 
-    if (completionDate != other.completionDate) {
+    if (completionDate != otherTask.completionDate) {
       return false;
     }
 

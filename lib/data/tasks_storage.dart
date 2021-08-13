@@ -1,5 +1,5 @@
 
-class TasksStorage {
+class StringTasksStorage {
   String _data = '{"tasks":[]}';
 
   String get data => _data;

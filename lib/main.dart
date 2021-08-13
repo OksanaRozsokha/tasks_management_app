@@ -1,16 +1,13 @@
-
 import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
 import 'package:tasks_manager_app/data/repositories/tasks_repository.dart';
 import 'package:tasks_manager_app/data/tasks_storage.dart';
 import 'package:tasks_manager_app/data/repositories/ram_tasks_repository.dart';
-// import 'package:tasks_manager_app/domain/events/servise_change_args.dart';
 import 'package:tasks_manager_app/domain/services/tasks_service.dart';
-import 'package:tasks_manager_app/presentation/tasks_manager_page.dart';
-// import 'package:event/event.dart';
+import 'package:tasks_manager_app/presentation/pages/tasks_manager_page.dart';
 
 void main() {
-  TasksRepository ramTasksRepo = RamTasksRepository(TasksStorage());
+  TasksRepository ramTasksRepo = RamTasksRepository(StringTasksStorage());
   EventEmitter emitter = new EventEmitter();
   TasksService tasksService = TasksService(ramTasksRepo, emitter);
 

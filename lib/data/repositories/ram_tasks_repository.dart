@@ -4,7 +4,7 @@ import 'package:tasks_manager_app/data/tasks_storage.dart';
 import 'package:tasks_manager_app/domain/entities/task_entity.dart';
 
 class RamTasksRepository extends TasksRepository {
-  TasksStorage tasksStorage;
+  StringTasksStorage tasksStorage;
   int _lastId = 0;
 
   RamTasksRepository(this.tasksStorage);
@@ -52,6 +52,5 @@ class RamTasksRepository extends TasksRepository {
   void _setTasksToStorage(tasksList) {
     String tasksJson = jsonEncode(tasksList.map((TaskEntity task) => task.toJson()).toList()).toString();
     tasksStorage.setTasks(tasksJson);
-    print(tasksStorage.data);
   }
 }

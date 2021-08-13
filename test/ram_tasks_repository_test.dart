@@ -4,7 +4,7 @@ import 'package:tasks_manager_app/domain/entities/task_entity.dart';
 import 'package:test/fake.dart';
 import 'package:test/test.dart';
 
-class TasksStorageFake extends Fake implements TasksStorage {
+class TasksStorageFake extends Fake implements StringTasksStorage {
   String _data = '{"tasks":[]}';
   @override
   String get data => _data;
@@ -32,7 +32,6 @@ void main() {
       final futureTasks = ramTasksRepository.getAllTasksEntities();
 
       futureTasks.then((value) {
-        print(value[0]);
         expect(value, expactedTasksList);
       });
       expect(futureTasks, completes);

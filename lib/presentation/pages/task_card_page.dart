@@ -22,6 +22,8 @@ class _TaskCardState extends State<TaskCard> {
 
   late bool isCompletedController;
   late int? completionDateController;
+  bool isTitleChanged  = false;
+  bool isDescriptionChanged  = false;
 
   @override
   void initState() {
@@ -41,8 +43,6 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   @override
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -64,6 +64,11 @@ class _TaskCardState extends State<TaskCard> {
                   decoration: InputDecoration(
                     hintText: 'Enter a title of the task'
                   ),
+                  onChanged: (text) {
+                    setState(() {
+                      isTitleChanged = task.title.trim() != titleInputController.text.trim();
+                    });
+                  },
                 ),
               ),
 
@@ -92,6 +97,11 @@ class _TaskCardState extends State<TaskCard> {
                   decoration: InputDecoration(
                     hintText: 'Add a description to the task'
                   ),
+                  onChanged: (text) {
+                    setState(() {
+                      isDescriptionChanged = task.description.trim() != descriptionInputController.text.trim();
+                    });
+                  },
                 ),
               ),
 
@@ -119,7 +129,7 @@ class _TaskCardState extends State<TaskCard> {
                 child: ElevatedButton(
                   child: Text('Save', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600,),),
                   style: ElevatedButton.styleFrom(
-                    primary: _isTaskDataChangedCondition() && titleInputController.text.trim().length> 0 ? Color(0xFF32AB32) : Color(0xFFDDDDDD),
+                    primary: _isTaskDataChangedCondition() && titleInputController.text.trim().length > 0 ? Color(0xFF32AB32) : Color(0xFFDDDDDD),
                     shadowColor: Colors.black,
                     padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, right: 8.0, left: 8.0),
                     minimumSize: Size(140, 50),
@@ -200,9 +210,9 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   bool _isTaskDataChangedCondition() {
-    return (task.title.trim() != titleInputController.text.trim()) ||
+    return isTitleChanged ||
                         (task.isCompleted != isCompletedController) ||
-                        (task.description.trim() != descriptionInputController.text.trim()) ||
+                        isDescriptionChanged ||
                         (task.completionDate != completionDateController);
   }
 }

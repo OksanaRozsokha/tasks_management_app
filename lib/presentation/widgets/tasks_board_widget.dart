@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:tasks_manager_app/domain/entities/task_entity.dart';
 import 'package:tasks_manager_app/domain/services/tasks_service.dart';
 import 'package:tasks_manager_app/presentation/widgets/short_task_block_widget.dart';
-import 'package:tasks_manager_app/presentation/widgets/task_card_widget.dart';
+import 'package:tasks_manager_app/presentation/pages/task_card_page.dart';
 
 class TasksBoard extends StatefulWidget {
   final TasksService tasksService;
@@ -28,7 +28,6 @@ class _TasksBoardState extends State<TasksBoard> {
    void initState() {
     tasksFuture = _getTasksList();
     super.initState();
-    // tasksService.getAllTasks().then((value) => null)
   }
 
   Future<List<TaskEntity>>  _getTasksList() async {
@@ -51,102 +50,99 @@ class _TasksBoardState extends State<TasksBoard> {
 
         } else if (snapshot.hasData) {
           final tasks = snapshot.data as List<TaskEntity>;
-          print('WIDGET HERE $tasks');
           return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 15,
+                    ),
+
+                    Container(
+                      width: (MediaQuery.of(context).size.width/2) - 22.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all( Radius.circular(10.0)),
+                        color: Color(0xFFDFE8FA),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Text('In progress', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
+                          ),
+                          Divider(),
+                          ListView(
+
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            key: Key(tasks.length.toString()),
+                            children: _buildUnCompletedTasksList(tasks)
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+
+                    Container(
+                      width: (MediaQuery.of(context).size.width/2) - 22.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all( Radius.circular(10.0)),
+                        color: Color(0xFFDFE8FA),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15.0),
+                            child: Text('Completed', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
+                          ),
+                          Divider(),
+                          ListView(
+
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            key: Key(tasks.length.toString()),
+                            children: _buildCompletedTasksList(tasks)
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+
                       SizedBox(
-                        width: 15,
-                      ),
-
-                      Container(
-                        width: (MediaQuery.of(context).size.width/2) - 22.5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all( Radius.circular(10.0)),
-                          color: Color(0xFFDFE8FA),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 5.0,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Text('In progress', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
-                            ),
-                            Divider(),
-                            ListView(
-
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              key: Key(tasks.length.toString()),
-                              children: _buildUnCompletedTasksList(tasks)
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-
-                     Container(
-                        width: (MediaQuery.of(context).size.width/2) - 22.5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all( Radius.circular(10.0)),
-                          color: Color(0xFFDFE8FA),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0), //(x,y)
-                              blurRadius: 5.0,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Text('Completed', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),)
-                            ),
-                            Divider(),
-                            ListView(
-
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              key: Key(tasks.length.toString()),
-                              children: _buildCompletedTasksList(tasks)
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-
-                       SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-
-
+                      width: 15,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         }
       }
 
@@ -164,7 +160,7 @@ class _TasksBoardState extends State<TasksBoard> {
         setState(() {
           var newTask = ev.eventData as TaskEntity;
           var isThisTaskExistInList = tasks.contains(newTask);
-          if (isThisTaskExistInList == false) {
+          if (!isThisTaskExistInList) {
             tasks.add(ev.eventData as TaskEntity);
           }
         });
@@ -213,9 +209,6 @@ class _TasksBoardState extends State<TasksBoard> {
               builder: (BuildContext context) => TaskCard(tasksService, allTasks[index]),
             );
           },
-          onLongPress: (){
-              // open dialog OR navigate OR do what you want
-          },
           child: ShortTaskBlock(allTasks[index]),
         );
       } else {
@@ -234,9 +227,6 @@ class _TasksBoardState extends State<TasksBoard> {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) => TaskCard(tasksService, allTasks[index]),
             ));
-          },
-          onLongPress: (){
-              // open dialog OR navigate OR do what you want
           },
           child: ShortTaskBlock(allTasks[index]),
         );
